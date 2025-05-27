@@ -61,6 +61,7 @@ public class EmployeeServiceTests
         var result = employeeService.GetAll();
         //Assert
         Assert.NotNull(result);
+        Assert.True(result.Length == 2);
         //[.. employeeRepository.GetAll().OrderBy(e => e.Name)];
     }
 
