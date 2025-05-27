@@ -5,13 +5,14 @@ using EmployeesApp.Web.Controllers;
 using EmployeesApp.Web.Views.Employees;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using static EmployeesApp.Web.Views.Employees.IndexVM;
 
 namespace EmployeesApp.Web.Tests
 {
     public class EmployeesControllerTests
     {
         [Fact]
-        public void Index_ReturnsView()
+        public void Test_Index_ReturnsView()
         {
             var employeeService = new Mock<IEmployeeService>();
             employeeService
@@ -27,7 +28,7 @@ namespace EmployeesApp.Web.Tests
         }
 
         [Fact]
-        public void Create_Creates()
+        public void Test_Create_CheckReturnType()
         {
             var employeeService = new Mock<IEmployeeService>();
             var controller = new EmployeesController(employeeService.Object);
@@ -36,6 +37,22 @@ namespace EmployeesApp.Web.Tests
            
             var redirectResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectResult.ActionName);
+            
+        }
+
+        [Fact]
+        public void Test_Details_IsValidType()
+        {
+            var employeeRepository = new Mock<IEmployeeRepository>();
+            employeeRepository
+                .Setup(o => o.GetById(1))
+                .Returns(new Employee { Id = 1, Name = "Acme", Email = "London" });
+
+            var employeeService = new Mock<EmployeeService>(employeeRepository.Object);
+            var controller = new EmployeesController(employeeService.Object);
+
+            var result = controller.Details(1);
+
             Assert.IsType<ViewResult>(result);
         }
     }

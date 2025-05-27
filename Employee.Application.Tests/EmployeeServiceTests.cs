@@ -39,10 +39,12 @@ public class EmployeeServiceTests
 
         employeeService.Add(employee);
         //Assert
-
-        Assert.NotNull(employee);
-        Assert.True(employeeService.GetAll().Length > 0);
-        Assert.Contains(employee, employeeService.GetAll());
+       
+        employeeRepository.Verify(r => r.Add(It.Is<Employee>(e =>
+                 e.Name == "Acme" &&
+                 e.Email == "london"
+             )), Times.Once);
+        
     }
 
     [Fact]
